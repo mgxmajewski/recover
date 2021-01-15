@@ -4,18 +4,24 @@
 
 typedef uint8_t BYTE;
 
+
+
+
 int main(int argc, char *argv[])
 {
     // Open memory card
     if(argv[1] !=0)
     {
     FILE *file = fopen(argv[1], "r");
-    }
-    else
-    {
-        return 1;
-    }
+    
+    int buffer[512];
+    
+    
     // Repeat until end of card:
+    while(!feof(file))
+    {
+        
+    }
         // Read 512 bytes into buffer
         // If start of new JPEG
             //If first JPEG
@@ -26,4 +32,9 @@ int main(int argc, char *argv[])
             // If already found JPEG
             
     // Close any remaining files
+    }
+    else
+    {
+        return 1;
+    }
 }
