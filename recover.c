@@ -23,11 +23,12 @@ int main(int argc, char *argv[])
         // Repeat until end of card:
             // Read 512 bytes into buffer
             fread_byte = fread(buffer, sizeof(BYTE), FILEBLOCK, file);
-            // if (true)
-            // {
-            //     continue;
-            // }
+          
             // If start of new JPEG
+            if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0 ) == 0xe0)
+            {
+                continue;
+            }
                 //If first JPEG
                 
                 // Else
