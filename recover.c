@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#define FILEBLOCK 512
 typedef uint8_t BYTE;
 
 
@@ -14,13 +15,12 @@ int main(int argc, char *argv[])
     {
     FILE *file = fopen(argv[1], "r");
     
-    int buffer[512];
-    
+
     
     // Repeat until end of card:
     while(!feof(file))
     {
-        
+        continue;
     }
         // Read 512 bytes into buffer
         // If start of new JPEG
