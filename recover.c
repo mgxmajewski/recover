@@ -29,18 +29,29 @@ int main(int argc, char *argv[])
         {
         // Repeat until end of card:
             // Read 512 bytes into buffer
-            
-         
             // If start of new JPEG
             if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0 ) == 0xe0)
             {
+                
+                if (!first_jpg)
+                {
+                    fclose(img);
+                }
+                
                 sprintf(recovered_filename, "%03i.jpg", recovered_img_count);
                 img = fopen(recovered_filename, "w");
                 recovered_img_count++;
+                
+                // If already found JPEG
+                if (first_jpg)
+                {
+                    fwrite(buffer, FILEBLOCK, 1, img);
+                    first_jpg = true;
+                }
             }
                
             //Else
-                // If already found JPEG
+                
 
         // Close any remaining filesDeclare 
         }
