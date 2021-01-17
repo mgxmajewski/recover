@@ -17,23 +17,23 @@ int main(int argc, char *argv[])
         BYTE buffer[FILEBLOCK];
         int recovered_img_count =0;
         char recovered_filename[8];
-        bool first_jpg = false;
+        bool found_jpg = false;
         FILE *analized_file = fopen(argv[1], "r");
         FILE *img = NULL;
         
         // Open memory card
         size_t fread_byte;
-        fread_byte = fread(buffer, FILEBLOCK, 1, analized_file);
+        fread_byte = fread(&buffer, FILEBLOCK, 1, analized_file);
 
+        // Repeat until end of card:
         while(fread_byte == 1)
         {
-        // Repeat until end of card:
             // Read 512 bytes into buffer
             // If start of new JPEG
             if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0 ) == 0xe0)
             {
                 
-                if (!first_jpg)
+                if (found_jpg)
                 {
                     fclose(img);
                 }
@@ -41,21 +41,19 @@ int main(int argc, char *argv[])
                 sprintf(recovered_filename, "%03i.jpg", recovered_img_count);
                 img = fopen(recovered_filename, "w");
                 recovered_img_count++;
-                
-                // If already found JPEG
-                if (first_jpg)
-                {
-                    fwrite(buffer, FILEBLOCK, 1, img);
-                    first_jpg = true;
-                }
+                found_jpg = true;
+        
             }
-               
-            //Else
-                
-
-        // Close any remaining filesDeclare 
+            
+            // If already found JPEG
+            if (found_jpg)
+            {
+                fwrite(&buffer, FILEBLOCK, 1, img);
+            }
         }
-       
+        // Close any remaining filesDeclare
+        fclose(analized_file);
+        fclose(img);
     }
     else
     {
