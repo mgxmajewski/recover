@@ -2,15 +2,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+
 #define FILEBLOCK 512
 typedef uint8_t BYTE;
 
-
-
-
 int main(int argc, char *argv[])
 {
-
     if(argv[1] !=0)
     {
         //Declare buffer size
@@ -18,15 +15,12 @@ int main(int argc, char *argv[])
         int recovered_img_count =0;
         char recovered_filename[8];
         bool found_jpg = false;
+        // Open memory card
         FILE *analized_file = fopen(argv[1], "r");
         FILE *img = NULL;
         
-        // Open memory card
-        size_t fread_byte;
-        fread_byte = fread(&buffer, FILEBLOCK, 1, analized_file);
-
         // Repeat until end of card:
-        while(fread_byte == 1)
+        while(fread(buffer, FILEBLOCK, 1, analized_file) == 1)
         {
             // Read 512 bytes into buffer
             // If start of new JPEG
@@ -42,13 +36,12 @@ int main(int argc, char *argv[])
                 img = fopen(recovered_filename, "w");
                 recovered_img_count++;
                 found_jpg = true;
-        
             }
             
             // If already found JPEG
             if (found_jpg)
             {
-                fwrite(&buffer, FILEBLOCK, 1, img);
+                fwrite(buffer, FILEBLOCK, 1, img);
             }
         }
         // Close any remaining filesDeclare
